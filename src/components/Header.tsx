@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CiMail } from "react-icons/ci";
 import { GoMoon, GoSun } from "react-icons/go";
 
 const Header = () => {
@@ -17,8 +18,15 @@ const Header = () => {
   }, [darkMode]);
 
   return (
-    <div className="flex items-center justify-between p-2.5 bg-emerald-100 border-b border-emerald-800 dark:bg-emerald-800 dark:border-emerald-100 dark:text-emerald-50">
-      <p className="text-5xl font-semibold">Leave Email Generator</p>
+    <div className="flex items-center justify-between py-10 bg-emerald-50 dark:bg-slate-800 text-emerald-600 w-7xl mx-auto">
+      <div>
+        <p className="flex gap-2.5 items-center text-5xl font-normal mb-1">
+          <CiMail/>
+          Leave Email Generator
+        </p>
+
+        <p>Create structured leave notifications for your team and HR.</p>
+      </div>
       <div>
         <button
           className="cursor-pointer"
