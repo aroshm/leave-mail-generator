@@ -10,6 +10,31 @@ const Content = () => {
     null,
     null,
   ]);
+
+  const [formData, setFormData] = useState({
+    receiverName: "",
+    senderName: "",
+    leavePersonName: "",
+    duration: "",
+    session: "",
+    leaveDates: "",
+    leaveType: "",
+    reason: "",
+    pendingTask: "",
+    responsiblePerson: "",
+  });
+
+  const handleFieldChange = (name: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(formData);
+  };
   const [startDate, endDate] = dateRange;
 
   const handleLeaveButtonToggle = (value: string) => {
@@ -28,8 +53,10 @@ const Content = () => {
     setDateRange(value);
   };
 
+  // console.log(senderName);
+
   return (
-    <div className="flex flex-1 gap-10 w-7xl mx-auto pb-5">
+    <div className="flex flex-1 gap-10 w-7xl mx-auto pb-5 overflow-auto">
       <EmailForm
         selectedLeave={plannedLeave}
         onLeaveToggle={handleLeaveButtonToggle}
@@ -40,6 +67,9 @@ const Content = () => {
         startDate={startDate}
         endDate={endDate}
         onDateSelect={handleDatePicker}
+        formData={formData}
+        onFieldChange={handleFieldChange}
+        onSubmit={handleSubmit}
       />
       <EmailOutput />
     </div>

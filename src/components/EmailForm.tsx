@@ -2,8 +2,24 @@ import { CiCalendar, CiUser } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { PiSuitcase } from "react-icons/pi";
+import { CgNotes } from "react-icons/cg";
+import { MdOutlineTask } from "react-icons/md";
+import { TbUsers } from "react-icons/tb";
 
 type EmailFormProps = {
+  formData: {
+    receiverName: string;
+    senderName: string;
+    leavePersonName: string;
+    duration: string;
+    session: string;
+    leaveDates: string;
+    leaveType: string;
+    reason: string;
+    pendingTask: string;
+    responsiblePerson: string;
+  };
   selectedLeave: string;
   selectedDuration: string;
   selectedSession: string;
@@ -13,13 +29,17 @@ type EmailFormProps = {
   onDurationToggle: (value: string) => void;
   onSessionToggle: (value: string) => void;
   onDateSelect: (value: [Date | null, Date | null]) => void;
+  onFieldChange: (name: string, value: string) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
 const togglePlanButtons = ["Planned", "Unplanned"];
 const toggleDurationButton = ["Full Day", "Half Day"];
 const toggleSessionHalfButton = ["Morning", "Evening"];
+const leaveType = ["Annual", "Casual", "Medical", "Lieu"];
 
 const EmailForm = ({
+  formData,
   selectedLeave,
   onLeaveToggle,
   selectedDuration,
@@ -29,9 +49,11 @@ const EmailForm = ({
   startDate,
   endDate,
   onDateSelect,
+  onFieldChange,
+  onSubmit,
 }: EmailFormProps) => {
   return (
-    <div className="flex-1 bg-emerald-100 dark:bg-slate-900 p-3.5 rounded-lg shadow-2xl shadow-slate-400 dark:shadow-emerald-900">
+    <div className="flex-1 bg-emerald-100 dark:bg-slate-900 p-3.5 rounded-lg shadow-2xl shadow-slate-400 dark:shadow-emerald-900 overflow-auto">
       <div className="flex justify-between items-center">
         <p className="flex items-center gap-1 font-semibold">
           <FaPlus />
@@ -55,7 +77,7 @@ const EmailForm = ({
         </div>
       </div>
 
-      <form className="max-w-sm mx-auto mt-5">
+      <form className="max-w-sm mx-auto mt-5" onSubmit={onSubmit}>
         <div className="mb-4">
           <label
             htmlFor="receiver-name"
@@ -70,6 +92,8 @@ const EmailForm = ({
             <input
               type="text"
               id="receiver-name"
+              value={formData.receiverName}
+              onChange={(e) => onFieldChange(e.target.name, e.target.value)}
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
               placeholder="Receiver Name"
             />
@@ -89,6 +113,8 @@ const EmailForm = ({
             <input
               type="text"
               id="sender-name"
+              value={formData.senderName}
+              onChange={(e) => onFieldChange(e.target.name, e.target.value)}
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
               placeholder="Sender Name"
             />
@@ -108,6 +134,8 @@ const EmailForm = ({
             <input
               type="text"
               id="leave-person"
+              value={formData.leavePersonName}
+              onChange={(e) => onFieldChange(e.target.name, e.target.value)}
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
               placeholder="Leave Person Name"
             />
@@ -126,7 +154,7 @@ const EmailForm = ({
                 <button
                   key={button}
                   type="button"
-                  value={selectedDuration}
+                  value={formData.duration}
                   className={`flex-1 px-2 py-1 rounded-md cursor-pointer ${button === selectedDuration ? "bg-emerald-200 dark:bg-slate-900" : ""}`}
                   onClick={() => onDurationToggle(button)}
                 >
@@ -149,7 +177,7 @@ const EmailForm = ({
                   <button
                     key={button}
                     type="button"
-                    value={selectedSession}
+                    value={formData.session}
                     className={`flex-1 px-2 py-1 rounded-md cursor-pointer ${button === selectedSession ? "bg-emerald-200 dark:bg-slate-900" : ""}`}
                     onClick={() => onSessionToggle(button)}
                   >
@@ -184,6 +212,96 @@ const EmailForm = ({
             />
           </div>
         </div>
+        <div className="mb-4">
+          <label
+            htmlFor="leave-type"
+            className="block mb-2.5 font-semibold uppercase text-sm"
+          >
+            Leave Type
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 inset-s-0 flex items-center ps-3 pointer-events-none">
+              <PiSuitcase />
+            </div>
+            <select
+              id="leave-type"
+              className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body appearance-none"
+            >
+              {leaveType.map((leave) => (
+                <option
+                  key={leave}
+                  value={leave}
+                  className="dark:bg-slate-800 dark:hover:bg-slate-900"
+                >
+                  {leave}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="leave-reason"
+            className="block mb-2.5 font-semibold uppercase text-sm"
+          >
+            Reason
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 inset-s-0 flex items-center ps-3 pointer-events-none h-2/3">
+              <CgNotes />
+            </div>
+            <textarea
+              id="leave-reason"
+              rows={2}
+              className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body resize-none"
+              placeholder="Brief reason for leave..."
+            />
+          </div>
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="pending-task"
+            className="block mb-2.5 font-semibold uppercase text-sm"
+          >
+            Pending Task
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 inset-s-0 flex items-center ps-3 pointer-events-none">
+              <MdOutlineTask />
+            </div>
+            <input
+              type="text"
+              id="pending-task"
+              className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
+              placeholder="Task to be handled"
+            />
+          </div>
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="responsible-person"
+            className="block mb-2.5 font-semibold uppercase text-sm"
+          >
+            Responsible Person
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 inset-s-0 flex items-center ps-3 pointer-events-none">
+              <TbUsers />
+            </div>
+            <input
+              type="text"
+              id="responsible-person"
+              className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
+              placeholder="Who is covering"
+            />
+          </div>
+        </div>
+        <button
+          type="submit"
+          className="text-white bg-emerald-900 rounded-md w-full hover:bg-emerald-800 cursor-pointer transition shadow-xs px-4 py-2.5"
+        >
+          Add to list
+        </button>
       </form>
     </div>
   );
