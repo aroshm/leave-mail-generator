@@ -52,6 +52,17 @@ const EmailForm = ({
   onFieldChange,
   onSubmit,
 }: EmailFormProps) => {
+  const formateDateRange = (dates: [Date | null, Date | null]) => {
+    const [start, end] = dates;
+
+    if (!start && !end) return "";
+
+    if (start && end) {
+      return `${start.toLocaleDateString("en-GB")} - ${end.toLocaleDateString("en-GB")}`;
+    }
+
+    return start ? start.toLocaleDateString("en-GB") : "";
+  };
   return (
     <div className="flex-1 bg-emerald-100 dark:bg-slate-900 p-3.5 rounded-lg shadow-2xl shadow-slate-400 dark:shadow-emerald-900 overflow-auto">
       <div className="flex justify-between items-center">
@@ -92,6 +103,7 @@ const EmailForm = ({
             <input
               type="text"
               id="receiver-name"
+              name="receiverName"
               value={formData.receiverName}
               onChange={(e) => onFieldChange(e.target.name, e.target.value)}
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
@@ -113,6 +125,7 @@ const EmailForm = ({
             <input
               type="text"
               id="sender-name"
+              name="senderName"
               value={formData.senderName}
               onChange={(e) => onFieldChange(e.target.name, e.target.value)}
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
@@ -134,6 +147,7 @@ const EmailForm = ({
             <input
               type="text"
               id="leave-person"
+              name="leavePersonName"
               value={formData.leavePersonName}
               onChange={(e) => onFieldChange(e.target.name, e.target.value)}
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
@@ -156,7 +170,10 @@ const EmailForm = ({
                   type="button"
                   value={formData.duration}
                   className={`flex-1 px-2 py-1 rounded-md cursor-pointer ${button === selectedDuration ? "bg-emerald-200 dark:bg-slate-900" : ""}`}
-                  onClick={() => onDurationToggle(button)}
+                  onClick={() => {
+                    onDurationToggle(button);
+                    onFieldChange("duration", button);
+                  }}
                 >
                   {button}
                 </button>
@@ -179,7 +196,10 @@ const EmailForm = ({
                     type="button"
                     value={formData.session}
                     className={`flex-1 px-2 py-1 rounded-md cursor-pointer ${button === selectedSession ? "bg-emerald-200 dark:bg-slate-900" : ""}`}
-                    onClick={() => onSessionToggle(button)}
+                    onClick={() => {
+                      onSessionToggle(button);
+                      onFieldChange("session", button);
+                    }}
                   >
                     {button}
                   </button>
@@ -206,7 +226,13 @@ const EmailForm = ({
               selectsRange={true}
               startDate={startDate}
               endDate={endDate}
-              onChange={(dates) => onDateSelect(dates)}
+              name="leaveDates"
+              dateFormat="dd/MM/yyyy"
+              onChange={(dates) => {
+                onDateSelect(dates);
+                onFieldChange("leaveDates", formateDateRange(dates));
+              }}
+              value={formData.leaveDates}
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
               placeholderText="Select date or range"
             />
@@ -226,6 +252,9 @@ const EmailForm = ({
             <select
               id="leave-type"
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body appearance-none"
+              name="leaveType"
+              value={formData.leaveType}
+              onChange={(e) => onFieldChange(e.target.name, e.target.value)}
             >
               {leaveType.map((leave) => (
                 <option
@@ -255,6 +284,9 @@ const EmailForm = ({
               rows={2}
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body resize-none"
               placeholder="Brief reason for leave..."
+              name="reason"
+              value={formData.reason}
+              onChange={(e) => onFieldChange(e.target.name, e.target.value)}
             />
           </div>
         </div>
@@ -274,6 +306,9 @@ const EmailForm = ({
               id="pending-task"
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
               placeholder="Task to be handled"
+              name="pendingTask"
+              value={formData.pendingTask}
+              onChange={(e) => onFieldChange(e.target.name, e.target.value)}
             />
           </div>
         </div>
@@ -293,6 +328,9 @@ const EmailForm = ({
               id="responsible-person"
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
               placeholder="Who is covering"
+              name="responsiblePerson"
+              value={formData.responsiblePerson}
+              onChange={(e) => onFieldChange(e.target.name, e.target.value)}
             />
           </div>
         </div>
