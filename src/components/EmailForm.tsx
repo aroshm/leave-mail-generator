@@ -6,20 +6,10 @@ import { PiSuitcase } from "react-icons/pi";
 import { CgNotes } from "react-icons/cg";
 import { MdOutlineTask } from "react-icons/md";
 import { TbUsers } from "react-icons/tb";
+import type { FormData } from "../types/form";
 
 type EmailFormProps = {
-  formData: {
-    receiverName: string;
-    senderName: string;
-    leavePersonName: string;
-    duration: string;
-    session: string;
-    leaveDates: string;
-    leaveType: string;
-    reason: string;
-    pendingTask: string;
-    responsiblePerson: string;
-  };
+  formData: FormData;
   selectedLeave: string;
   selectedDuration: string;
   selectedSession: string;

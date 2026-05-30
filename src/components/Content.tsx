@@ -1,6 +1,7 @@
 import { useState } from "react";
 import EmailForm from "./EmailForm";
 import EmailOutput from "./EmailOutput";
+import type { FormData, LeaveEntry } from "../types/form";
 
 const Content = () => {
   const [plannedLeave, setPlannedLeave] = useState("Planned");
@@ -11,18 +12,20 @@ const Content = () => {
     null,
   ]);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     receiverName: "",
     senderName: "",
     leavePersonName: "",
-    duration: "",
-    session: "",
+    duration: "Full Day",
+    session: "Morning",
     leaveDates: "",
     leaveType: "",
     reason: "",
     pendingTask: "",
     responsiblePerson: "",
   });
+
+  const [submissions, setSubmissions] = useState<LeaveEntry[]>([]);
 
   const handleFieldChange = (name: string, value: string) => {
     setFormData((prev) => ({
@@ -33,8 +36,21 @@ const Content = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
+    setSubmissions((prev) => [...prev, {...formData, id: Date.now()}]);
+    setFormData({
+      receiverName: "",
+      senderName: "",
+      leavePersonName: "",
+      duration: "Full Day",
+      session: "Morning",
+      leaveDates: "",
+      leaveType: "",
+      reason: "",
+      pendingTask: "",
+      responsiblePerson: "",
+    });
   };
+
   const [startDate, endDate] = dateRange;
 
   const handleLeaveButtonToggle = (value: string) => {
@@ -71,7 +87,7 @@ const Content = () => {
         onFieldChange={handleFieldChange}
         onSubmit={handleSubmit}
       />
-      <EmailOutput />
+      <EmailOutput data={submissions} />
     </div>
   );
 };
