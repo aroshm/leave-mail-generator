@@ -326,7 +326,7 @@ const EmailForm = ({
         </div>
         <button
           type="submit"
-          className="text-white bg-emerald-900 rounded-md w-full hover:bg-emerald-800 cursor-pointer transition shadow-xs px-4 py-2.5"
+          className="text-white bg-emerald-700 rounded-md w-full hover:bg-emerald-600 cursor-pointer transition shadow-xs px-4 py-2.5"
         >
           Add to list
         </button>

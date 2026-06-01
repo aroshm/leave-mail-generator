@@ -36,7 +36,7 @@ const Content = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmissions((prev) => [...prev, {...formData, id: Date.now()}]);
+    setSubmissions((prev) => [...prev, { ...formData, id: Date.now() }]);
     setFormData({
       receiverName: "",
       senderName: "",
@@ -69,7 +69,9 @@ const Content = () => {
     setDateRange(value);
   };
 
-  // console.log(senderName);
+  const handleDeleteItem = (id: number) => {
+    setSubmissions(submissions.filter((prev) => prev.id !== id));
+  };
 
   return (
     <div className="flex flex-1 gap-10 w-7xl mx-auto pb-5 overflow-auto">
@@ -87,7 +89,7 @@ const Content = () => {
         onFieldChange={handleFieldChange}
         onSubmit={handleSubmit}
       />
-      <EmailOutput data={submissions} />
+      <EmailOutput data={submissions} onDelete={handleDeleteItem} />
     </div>
   );
 };
