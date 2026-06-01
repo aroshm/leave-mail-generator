@@ -70,7 +70,7 @@ const Content = () => {
   };
 
   const handleDeleteItem = (id: number) => {
-    setSubmissions(submissions.filter((prev) => prev.id !== id));
+    setSubmissions(submissions.filter((item) => item.id !== id));
   };
 
   return (

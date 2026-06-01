@@ -18,9 +18,11 @@ const EmailOutput = ({ data, onDelete }: EmailOutputProps) => {
           <p className="font-semibold">LEAVE ENTRIES</p>
           <span>({data && data.length})</span>
         </div>
-        <button className="text-white bg-emerald-700 rounded-md hover:bg-emerald-600 cursor-pointer transition shadow-xs px-4 py-2.5">
-          Generate Email
-        </button>
+        {data && data.length > 0 && (
+          <button className="text-white bg-emerald-700 rounded-md hover:bg-emerald-600 cursor-pointer transition shadow-xs px-4 py-2.5">
+            Generate Email
+          </button>
+        )}
       </div>
 
       {data && data.length > 0 ? (
@@ -67,7 +69,7 @@ const EmailOutput = ({ data, onDelete }: EmailOutputProps) => {
       )}
 
       <div className="flex flex-col bg-emerald-200 dark:bg-slate-800 px-3 py-3 gap-2 rounded-md">
-        <div className="flex justify-between items-center border-b border-emerald-500 pb-2.5">
+        <div className="flex justify-between items-center pb-1.5">
           <div className="flex items-center gap-2">
             <MdOutlineMail />
             EMAIL PREVIEW
@@ -77,14 +79,147 @@ const EmailOutput = ({ data, onDelete }: EmailOutputProps) => {
             Copy HTML
           </button>
         </div>
-        <div className="px-4 py-2.5">
+        <div className="px-4 py-2.5 bg-emerald-100 rounded-md">
           <div
             style={{
               fontFamily: "'Helvetica', Arial, sans-serif",
               color: "rgb(51, 51, 51)",
               maxWidth: "600px",
             }}
-          ></div>
+          >
+            <p style={{ fontSize: "16px", lineHeight: "1.5" }}>Hi</p>
+            <p style={{ fontSize: "16px", lineHeight: "1.5" }}>
+              Please find the{" "}
+              <span style={{ fontWeight: "bold" }}>planned</span> leaves for
+              this sprint from Kingfisher team as follows.
+            </p>
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                marginTop: "20px",
+                marginBottom: "20px",
+                fontSize: "14px",
+              }}
+            >
+              <thead>
+                <tr style={{ backgroundColor: "rgb(248, 249, 250)" }}>
+                  <th
+                    style={{
+                      border: "1px solid rgb(222, 226, 230)",
+                      padding: "12px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Name
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid rgb(222, 226, 230)",
+                      padding: "12px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Date(s)
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid rgb(222, 226, 230)",
+                      padding: "12px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Type
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid rgb(222, 226, 230)",
+                      padding: "12px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Reason
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid rgb(222, 226, 230)",
+                      padding: "12px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Tasks
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid rgb(222, 226, 230)",
+                      padding: "12px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Covered By
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    style={{
+                      border: "1px solid rgb(222, 226, 230)",
+                      padding: "12px",
+                    }}
+                  >
+                    Koshala wick
+                  </td>
+                  <td
+                    style={{
+                      border: "1px solid rgb(222, 226, 230)",
+                      padding: "12px",
+                    }}
+                  >
+                    Jun 1, 2026
+                  </td>
+                  <td
+                    style={{
+                      border: "1px solid rgb(222, 226, 230)",
+                      padding: "12px",
+                    }}
+                  >
+                    Casual
+                  </td>
+                  <td
+                    style={{
+                      border: "1px solid rgb(222, 226, 230)",
+                      padding: "12px",
+                    }}
+                  >
+                    Personal
+                  </td>
+                  <td
+                    style={{
+                      border: "1px solid rgb(222, 226, 230)",
+                      padding: "12px",
+                    }}
+                  >
+                    API testing
+                  </td>
+                  <td
+                    style={{
+                      border: "1px solid rgb(222, 226, 230)",
+                      padding: "12px",
+                    }}
+                  >
+                    Suvethan
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p
+              style={{ fontSize: "16px", lineHeight: "1.5", marginTop: "30px" }}
+            >
+              Best regards,<br></br>
+              <strong>Arosh Athukorala</strong>
+            </p>
+          </div>
         </div>
       </div>
     </div>
