@@ -7,9 +7,10 @@ import { FaTrashAlt } from "react-icons/fa";
 type EmailOutputProps = {
   data: LeaveEntry[];
   onDelete: (id: number) => void;
+  handleReset: () => void;
 };
 
-const EmailOutput = ({ data, onDelete }: EmailOutputProps) => {
+const EmailOutput = ({ data, onDelete, handleReset }: EmailOutputProps) => {
   return (
     <div className="flex flex-col gap-2.5 flex-2 bg-emerald-100 dark:bg-slate-900 p-3.5 rounded-lg shadow-2xl shadow-slate-400 dark:shadow-emerald-900 overflow-auto">
       <div className="flex items-center justify-between">
@@ -19,9 +20,12 @@ const EmailOutput = ({ data, onDelete }: EmailOutputProps) => {
           <span>({data && data.length})</span>
         </div>
         {data && data.length > 0 && (
-          <button className="text-white bg-emerald-700 rounded-md hover:bg-emerald-600 cursor-pointer transition shadow-xs px-4 py-2.5">
-            Generate Email
-          </button>
+          <div className="flex justify-end items-center gap-2.5">
+            <button className="text-white bg-red-600 dark:bg-red-400 rounded-md hover:bg-red-700 dark:hover:bg-red-500 cursor-pointer transition shadow-xs px-4 py-2.5" onClick={() => handleReset()}>Reset</button>
+            <button className="text-white bg-emerald-700 rounded-md hover:bg-emerald-600 cursor-pointer transition shadow-xs px-4 py-2.5">
+              Generate Email
+            </button>
+          </div>
         )}
       </div>
 

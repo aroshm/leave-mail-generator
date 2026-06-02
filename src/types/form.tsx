@@ -1,6 +1,4 @@
 export type FormData = {
-  receiverName: string;
-  senderName: string;
   leavePersonName: string;
   duration: "Full Day" | "Half Day";
   session: "Morning" | "Evening";

@@ -1,9 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EmailForm from "./EmailForm";
 import EmailOutput from "./EmailOutput";
 import type { FormData, LeaveEntry } from "../types/form";
 
 const Content = () => {
+  const [receiver, setReceiver] = useState<string>(() => {
+    return localStorage.getItem("receiver") || "";
+  });
+
+  const [sender, setSender] = useState<string>(() => {
+    return localStorage.getItem("sender") || "";
+  });
+
+  const [isReceiver, setIsReceiver] = useState<boolean>(() => {
+    return localStorage.getItem("receiver") != null;
+  });
+
+  const [isSender, setIsSender] = useState<boolean>(() => {
+    return localStorage.getItem("sender") != null;
+  });
+
   const [plannedLeave, setPlannedLeave] = useState("Planned");
   const [duration, setDuration] = useState("Full Day");
   const [selectSession, setSelectSession] = useState("Morning");
@@ -12,9 +28,12 @@ const Content = () => {
     null,
   ]);
 
+  useEffect(() => {
+    localStorage.setItem("receiver", receiver);
+    localStorage.setItem("sender", sender);
+  }, [receiver, sender]);
+
   const [formData, setFormData] = useState<FormData>({
-    receiverName: "",
-    senderName: "",
     leavePersonName: "",
     duration: "Full Day",
     session: "Morning",
@@ -27,6 +46,25 @@ const Content = () => {
 
   const [submissions, setSubmissions] = useState<LeaveEntry[]>([]);
 
+  const handleReceiver = (value: string) => {
+    setReceiver(value);
+    setIsReceiver(true);
+  };
+
+  const handleSender = (value: string) => {
+    setSender(value);
+    setIsSender(true);
+  };
+
+  const handleReset = () => {
+    localStorage.removeItem("receiver");
+    localStorage.removeItem("sender");
+    setSender("");
+    setIsSender(false);
+    setReceiver("");
+    setIsReceiver(false);
+  }
+
   const handleFieldChange = (name: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -38,8 +76,6 @@ const Content = () => {
     e.preventDefault();
     setSubmissions((prev) => [...prev, { ...formData, id: Date.now() }]);
     setFormData({
-      receiverName: "",
-      senderName: "",
       leavePersonName: "",
       duration: "Full Day",
       session: "Morning",
@@ -88,8 +124,14 @@ const Content = () => {
         formData={formData}
         onFieldChange={handleFieldChange}
         onSubmit={handleSubmit}
+        handleReceiver={handleReceiver}
+        receiver={receiver}
+        isReceiver={isReceiver}
+        sender={sender}
+        isSender={isSender}
+        handleSender={handleSender}
       />
-      <EmailOutput data={submissions} onDelete={handleDeleteItem} />
+      <EmailOutput data={submissions} onDelete={handleDeleteItem} handleReset={handleReset}/>
     </div>
   );
 };

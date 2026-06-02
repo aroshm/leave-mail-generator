@@ -15,12 +15,18 @@ type EmailFormProps = {
   selectedSession: string;
   startDate: Date | null;
   endDate: Date | null;
+  receiver: string;
+  sender: string;
+  isReceiver: boolean;
+  isSender: boolean;
   onLeaveToggle: (value: string) => void;
   onDurationToggle: (value: string) => void;
   onSessionToggle: (value: string) => void;
   onDateSelect: (value: [Date | null, Date | null]) => void;
   onFieldChange: (name: string, value: string) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  handleReceiver: (value: string) => void;
+  handleSender: (value: string) => void;
 };
 
 const togglePlanButtons = ["Planned", "Unplanned"];
@@ -41,6 +47,12 @@ const EmailForm = ({
   onDateSelect,
   onFieldChange,
   onSubmit,
+  receiver,
+  handleReceiver,
+  isReceiver,
+  sender,
+  isSender,
+  handleSender,
 }: EmailFormProps) => {
   const formateDateRange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
@@ -94,9 +106,10 @@ const EmailForm = ({
               type="text"
               id="receiver-name"
               name="receiverName"
-              value={formData.receiverName}
-              onChange={(e) => onFieldChange(e.target.name, e.target.value)}
-              className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
+              value={receiver}
+              onChange={(e) => handleReceiver(e.target.value)}
+              disabled={isReceiver}
+              className={`block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible:border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body ${isReceiver ? "border-emerald-900 bg-emerald-200 dark:bg-slate-800" : ""}`}
               placeholder="Receiver Name"
             />
           </div>
@@ -116,9 +129,10 @@ const EmailForm = ({
               type="text"
               id="sender-name"
               name="senderName"
-              value={formData.senderName}
-              onChange={(e) => onFieldChange(e.target.name, e.target.value)}
-              className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
+              value={sender}
+              onChange={(e) => handleSender(e.target.value)}
+              disabled={isSender}
+              className={`block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible:border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body ${isSender ? "border-emerald-900 bg-emerald-200 dark:bg-slate-800" : ""}`}
               placeholder="Sender Name"
             />
           </div>
