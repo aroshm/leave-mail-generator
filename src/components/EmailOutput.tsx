@@ -1,8 +1,7 @@
-import { CiCalendar } from "react-icons/ci";
 import { TbUsers } from "react-icons/tb";
 import { MdContentCopy, MdOutlineMail } from "react-icons/md";
 import type { LeaveEntry } from "../types/form";
-import { FaTrashAlt } from "react-icons/fa";
+import PreviewItem from "./PreviewItem";
 
 type EmailOutputProps = {
   data: LeaveEntry[];
@@ -21,7 +20,12 @@ const EmailOutput = ({ data, onDelete, handleReset }: EmailOutputProps) => {
         </div>
         {data && data.length > 0 && (
           <div className="flex justify-end items-center gap-2.5">
-            <button className="text-white bg-red-600 dark:bg-red-400 rounded-md hover:bg-red-700 dark:hover:bg-red-500 cursor-pointer transition shadow-xs px-4 py-2.5" onClick={() => handleReset()}>Reset</button>
+            <button
+              className="text-white bg-red-600 dark:bg-red-400 rounded-md hover:bg-red-700 dark:hover:bg-red-500 cursor-pointer transition shadow-xs px-4 py-2.5"
+              onClick={() => handleReset()}
+            >
+              Reset
+            </button>
             <button className="text-white bg-emerald-700 rounded-md hover:bg-emerald-600 cursor-pointer transition shadow-xs px-4 py-2.5">
               Generate Email
             </button>
@@ -35,32 +39,7 @@ const EmailOutput = ({ data, onDelete, handleReset }: EmailOutputProps) => {
             className="group flex justify-between items-center bg-emerald-200 dark:bg-slate-800 px-3 py-3 gap-2 rounded-md"
             key={entry.id}
           >
-            <div className="flex flex-col">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <p className="font-semibold">{entry.leavePersonName}</p>
-                  <span className="bg-emerald-800 text-emerald-300 text-xs font-medium px-1.5 py-0.5 rounded">
-                    {entry.leaveType}
-                  </span>
-                </div>
-                <div className="flex gap-6 text-sm">
-                  <div className="flex items-center gap-1">
-                    <CiCalendar />
-                    {entry.leaveDates}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <TbUsers />
-                    {entry.responsiblePerson}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <button
-              className="opacity-0 group-hover:opacity-100 transition cursor-pointer"
-              onClick={() => onDelete(entry.id)}
-            >
-              <FaTrashAlt className="text-red-600 dark:text-red-400 " />
-            </button>
+            <PreviewItem onDelete={onDelete} entry={entry} />
           </div>
         ))
       ) : (

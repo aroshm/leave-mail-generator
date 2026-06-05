@@ -110,6 +110,7 @@ const EmailForm = ({
               onChange={(e) => handleReceiver(e.target.value)}
               disabled={isReceiver}
               className={`block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible:border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body ${isReceiver ? "border-emerald-900 bg-emerald-200 dark:bg-slate-800" : ""}`}
+              autoComplete="off"
               placeholder="Receiver Name"
             />
           </div>
@@ -133,6 +134,7 @@ const EmailForm = ({
               onChange={(e) => handleSender(e.target.value)}
               disabled={isSender}
               className={`block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible:border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body ${isSender ? "border-emerald-900 bg-emerald-200 dark:bg-slate-800" : ""}`}
+              autoComplete="off"
               placeholder="Sender Name"
             />
           </div>
@@ -155,6 +157,7 @@ const EmailForm = ({
               value={formData.leavePersonName}
               onChange={(e) => onFieldChange(e.target.name, e.target.value)}
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
+              autoComplete="off"
               placeholder="Leave Person Name"
             />
           </div>
@@ -238,6 +241,7 @@ const EmailForm = ({
               }}
               value={formData.leaveDates}
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
+              autoComplete="off"
               placeholderText="Select date or range"
             />
           </div>
@@ -309,6 +313,7 @@ const EmailForm = ({
               type="text"
               id="pending-task"
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
+              autoComplete="off"
               placeholder="Task to be handled"
               name="pendingTask"
               value={formData.pendingTask}
@@ -331,6 +336,7 @@ const EmailForm = ({
               type="text"
               id="responsible-person"
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
+              autoComplete="off"
               placeholder="Who is covering"
               name="responsiblePerson"
               value={formData.responsiblePerson}

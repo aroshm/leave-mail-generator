@@ -48,12 +48,10 @@ const Content = () => {
 
   const handleReceiver = (value: string) => {
     setReceiver(value);
-    setIsReceiver(true);
   };
 
   const handleSender = (value: string) => {
     setSender(value);
-    setIsSender(true);
   };
 
   const handleReset = () => {
@@ -63,7 +61,8 @@ const Content = () => {
     setIsSender(false);
     setReceiver("");
     setIsReceiver(false);
-  }
+    setSubmissions([]);
+  };
 
   const handleFieldChange = (name: string, value: string) => {
     setFormData((prev) => ({
@@ -75,6 +74,9 @@ const Content = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmissions((prev) => [...prev, { ...formData, id: Date.now() }]);
+    setIsReceiver(true);
+    setIsSender(true);
+
     setFormData({
       leavePersonName: "",
       duration: "Full Day",
@@ -107,6 +109,15 @@ const Content = () => {
 
   const handleDeleteItem = (id: number) => {
     setSubmissions(submissions.filter((item) => item.id !== id));
+
+    if (submissions.length == 1) {
+      localStorage.removeItem("receiver");
+      localStorage.removeItem("sender");
+      setSender("");
+      setIsSender(false);
+      setReceiver("");
+      setIsReceiver(false);
+    }
   };
 
   return (
@@ -131,7 +142,11 @@ const Content = () => {
         isSender={isSender}
         handleSender={handleSender}
       />
-      <EmailOutput data={submissions} onDelete={handleDeleteItem} handleReset={handleReset}/>
+      <EmailOutput
+        data={submissions}
+        onDelete={handleDeleteItem}
+        handleReset={handleReset}
+      />
     </div>
   );
 };
