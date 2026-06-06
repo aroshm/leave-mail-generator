@@ -13,12 +13,14 @@ const Content = () => {
   });
 
   const [isReceiver, setIsReceiver] = useState<boolean>(() => {
-    return localStorage.getItem("receiver") != null;
+    return localStorage.getItem("receiver") != "";
   });
 
   const [isSender, setIsSender] = useState<boolean>(() => {
-    return localStorage.getItem("sender") != null;
+    return localStorage.getItem("sender") != "";
   });
+
+  console.log(localStorage.getItem("receiver"));
 
   const [plannedLeave, setPlannedLeave] = useState("Planned");
   const [duration, setDuration] = useState("Full Day");
