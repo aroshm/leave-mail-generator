@@ -7,6 +7,7 @@ import { CgNotes } from "react-icons/cg";
 import { MdOutlineTask } from "react-icons/md";
 import { TbUsers } from "react-icons/tb";
 import type { FormData } from "../types/form";
+import { useForm, Controller } from "react-hook-form";
 
 type EmailFormProps = {
   formData: FormData;
@@ -24,7 +25,7 @@ type EmailFormProps = {
   onSessionToggle: (value: string) => void;
   onDateSelect: (value: [Date | null, Date | null]) => void;
   onFieldChange: (name: string, value: string) => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (data: FormData) => void;
   handleReceiver: (value: string) => void;
   handleSender: (value: string) => void;
 };
@@ -54,6 +55,13 @@ const EmailForm = ({
   isSender,
   handleSender,
 }: EmailFormProps) => {
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormData>();
+
   const formateDateRange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
 
@@ -90,7 +98,7 @@ const EmailForm = ({
         </div>
       </div>
 
-      <form className="max-w-sm mx-auto mt-5" onSubmit={onSubmit}>
+      <form className="max-w-sm mx-auto mt-5" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <label
             htmlFor="receiver-name"
@@ -103,6 +111,9 @@ const EmailForm = ({
               <CiUser />
             </div>
             <input
+              {...register("receiverName", {
+                required: "Receiver is Required",
+              })}
               type="text"
               id="receiver-name"
               name="receiverName"
@@ -114,6 +125,11 @@ const EmailForm = ({
               placeholder="Receiver Name"
             />
           </div>
+          {errors.receiverName && (
+            <p className="text-red-600 dark:text-red-400">
+              {errors.receiverName.message}
+            </p>
+          )}
         </div>
         <div className="mb-4">
           <label
@@ -127,6 +143,7 @@ const EmailForm = ({
               <CiUser />
             </div>
             <input
+              {...register("senderName", { required: "Sender is Required" })}
               type="text"
               id="sender-name"
               name="senderName"
@@ -138,6 +155,11 @@ const EmailForm = ({
               placeholder="Sender Name"
             />
           </div>
+          {errors.senderName && (
+            <p className="text-red-600 dark:text-red-400">
+              {errors.senderName.message}
+            </p>
+          )}
         </div>
         <div className="mb-4">
           <label
@@ -151,6 +173,9 @@ const EmailForm = ({
               <CiUser />
             </div>
             <input
+              {...register("leavePersonName", {
+                required: "Leave person is Required",
+              })}
               type="text"
               id="leave-person"
               name="leavePersonName"
@@ -161,6 +186,11 @@ const EmailForm = ({
               placeholder="Leave Person Name"
             />
           </div>
+          {errors.leavePersonName && (
+            <p className="text-red-600 dark:text-red-400">
+              {errors.leavePersonName.message}
+            </p>
+          )}
         </div>
         <div className="flex gap-3 mb-4">
           <div className="flex flex-col flex-1">
@@ -228,23 +258,36 @@ const EmailForm = ({
             <div className="absolute inset-y-0 inset-s-0 flex items-center ps-3 pointer-events-none">
               <CiCalendar />
             </div>
-            <DatePicker
-              id="select-date"
-              selectsRange={true}
-              startDate={startDate}
-              endDate={endDate}
+            <Controller
               name="leaveDates"
-              dateFormat="dd/MM/yyyy"
-              onChange={(dates) => {
-                onDateSelect(dates);
-                onFieldChange("leaveDates", formateDateRange(dates));
-              }}
-              value={formData.leaveDates}
-              className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
-              autoComplete="off"
-              placeholderText="Select date or range"
+              control={control}
+              rules={{ required: "Leave dates are required" }}
+              render={({ field }) => (
+                <DatePicker
+                  id="select-date"
+                  selectsRange={true}
+                  startDate={startDate}
+                  endDate={endDate}
+                  dateFormat="dd/MM/yyyy"
+                  onChange={(dates) => {
+                    onDateSelect(dates);
+                    const formatted = formateDateRange(dates);
+                    field.onChange(formatted);
+                    onFieldChange("leaveDates", formatted);
+                  }}
+                  value={formData.leaveDates}
+                  className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
+                  autoComplete="off"
+                  placeholderText="Select date or range"
+                />
+              )}
             />
           </div>
+          {errors.leaveDates && (
+            <p className="text-red-600 dark:text-red-400">
+              {errors.leaveDates.message}
+            </p>
+          )}
         </div>
         <div className="mb-4">
           <label
@@ -310,6 +353,7 @@ const EmailForm = ({
               <MdOutlineTask />
             </div>
             <input
+              {...register("pendingTask", { required: "Task is Required" })}
               type="text"
               id="pending-task"
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
@@ -320,6 +364,11 @@ const EmailForm = ({
               onChange={(e) => onFieldChange(e.target.name, e.target.value)}
             />
           </div>
+          {errors.pendingTask && (
+            <p className="text-red-600 dark:text-red-400">
+              {errors.pendingTask.message}
+            </p>
+          )}
         </div>
         <div className="mb-4">
           <label
@@ -333,6 +382,9 @@ const EmailForm = ({
               <TbUsers />
             </div>
             <input
+              {...register("responsiblePerson", {
+                required: "Responsible person is Required",
+              })}
               type="text"
               id="responsible-person"
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body"
@@ -343,6 +395,11 @@ const EmailForm = ({
               onChange={(e) => onFieldChange(e.target.name, e.target.value)}
             />
           </div>
+          {errors.responsiblePerson && (
+            <p className="text-red-600 dark:text-red-400">
+              {errors.responsiblePerson.message}
+            </p>
+          )}
         </div>
         <button
           type="submit"

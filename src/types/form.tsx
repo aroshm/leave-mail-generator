@@ -1,4 +1,6 @@
 export type FormData = {
+  receiverName?: string;
+  senderName?: string;
   leavePersonName: string;
   duration: "Full Day" | "Half Day";
   session: "Morning" | "Evening";
@@ -12,3 +14,5 @@ export type FormData = {
 export type LeaveEntry = FormData & {
   id: number;
 };
+
+export type FormErrors = Partial<Record<keyof FormData, string>>;

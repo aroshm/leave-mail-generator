@@ -20,8 +20,6 @@ const Content = () => {
     return localStorage.getItem("sender") != "";
   });
 
-  console.log(localStorage.getItem("receiver"));
-
   const [plannedLeave, setPlannedLeave] = useState("Planned");
   const [duration, setDuration] = useState("Full Day");
   const [selectSession, setSelectSession] = useState("Morning");
@@ -73,9 +71,8 @@ const Content = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmissions((prev) => [...prev, { ...formData, id: Date.now() }]);
+  const handleFormSubmit = (data: FormData) => {
+    setSubmissions((prev) => [...prev, { ...data, id: Date.now() }]);
     setIsReceiver(true);
     setIsSender(true);
 
@@ -136,7 +133,7 @@ const Content = () => {
         onDateSelect={handleDatePicker}
         formData={formData}
         onFieldChange={handleFieldChange}
-        onSubmit={handleSubmit}
+        onSubmit={handleFormSubmit}
         handleReceiver={handleReceiver}
         receiver={receiver}
         isReceiver={isReceiver}
