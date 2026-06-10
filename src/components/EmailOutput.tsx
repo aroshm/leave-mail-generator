@@ -18,19 +18,20 @@ const EmailOutput = ({ data, onDelete, handleReset }: EmailOutputProps) => {
           <p className="font-semibold">LEAVE ENTRIES</p>
           <span>({data && data.length})</span>
         </div>
-        {data && data.length > 0 && (
-          <div className="flex justify-end items-center gap-2.5">
-            <button
-              className="text-white bg-red-600 dark:bg-red-400 rounded-md hover:bg-red-700 dark:hover:bg-red-500 cursor-pointer transition shadow-xs px-4 py-2.5"
-              onClick={() => handleReset()}
-            >
-              Reset
-            </button>
+
+        <div className="flex justify-end items-center gap-2.5">
+          <button
+            className="text-white bg-red-600 dark:bg-red-400 rounded-md hover:bg-red-700 dark:hover:bg-red-500 cursor-pointer transition shadow-xs px-4 py-2.5"
+            onClick={() => handleReset()}
+          >
+            Reset
+          </button>
+          {data && data.length > 0 && (
             <button className="text-white bg-emerald-700 rounded-md hover:bg-emerald-600 cursor-pointer transition shadow-xs px-4 py-2.5">
               Generate Email
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {data && data.length > 0 ? (

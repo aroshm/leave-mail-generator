@@ -40,9 +40,7 @@ const EmailForm = ({
   selectedLeave,
   onLeaveToggle,
   selectedDuration,
-  onDurationToggle,
   selectedSession,
-  onSessionToggle,
   startDate,
   endDate,
   onDateSelect,
@@ -201,24 +199,38 @@ const EmailForm = ({
               className="p-1 inline-flex rounded-md shadow-xs -space-x-px bg-emerald-50 dark:bg-slate-800 flex-1"
               role="group"
             >
-              {toggleDurationButton.map((button) => (
-                <button
-                  key={button}
-                  type="button"
-                  value={formData.duration}
-                  className={`flex-1 px-2 py-1 rounded-md cursor-pointer ${button === selectedDuration ? "bg-emerald-200 dark:bg-slate-900" : ""}`}
-                  onClick={() => {
-                    onDurationToggle(button);
-                    onFieldChange("duration", button);
-                  }}
-                >
-                  {button}
-                </button>
-              ))}
+              <Controller
+                name="duration"
+                control={control}
+                defaultValue={selectedDuration as FormData["duration"]}
+                render={({ field }) => (
+                  <>
+                    {toggleDurationButton.map((button) => {
+                      const isActive = button === field.value;
+                      return (
+                        <button
+                          key={button}
+                          type="button"
+                          className={`flex-1 px-2 py-1 rounded-md cursor-pointer ${isActive ? "bg-emerald-200 dark:bg-slate-900" : ""}`}
+                          onClick={() => {
+                            field.onChange(button);
+
+                            if (typeof onFieldChange === "function") {
+                              onFieldChange("duration", button);
+                            }
+                          }}
+                        >
+                          {button}
+                        </button>
+                      );
+                    })}
+                  </>
+                )}
+              />
             </div>
           </div>
 
-          {selectedDuration === "Half Day" ? (
+          {formData.duration === "Half Day" ? (
             <div className="flex flex-col flex-1">
               <span className="block mb-2.5 font-semibold uppercase text-sm">
                 Session
@@ -227,20 +239,35 @@ const EmailForm = ({
                 className="p-1 inline-flex rounded-md shadow-xs -space-x-px bg-emerald-50 dark:bg-slate-800 flex-1"
                 role="group"
               >
-                {toggleSessionHalfButton.map((button) => (
-                  <button
-                    key={button}
-                    type="button"
-                    value={formData.session}
-                    className={`flex-1 px-2 py-1 rounded-md cursor-pointer ${button === selectedSession ? "bg-emerald-200 dark:bg-slate-900" : ""}`}
-                    onClick={() => {
-                      onSessionToggle(button);
-                      onFieldChange("session", button);
-                    }}
-                  >
-                    {button}
-                  </button>
-                ))}
+                <Controller
+                  name="session"
+                  control={control}
+                  defaultValue={selectedSession as FormData["session"]}
+                  render={({ field }) => (
+                    <>
+                      {toggleSessionHalfButton.map((button) => {
+                        const isActive = button === field.value;
+                        return (
+                          <button
+                            key={button}
+                            type="button"
+                            value={formData.session}
+                            className={`flex-1 px-2 py-1 rounded-md cursor-pointer ${isActive ? "bg-emerald-200 dark:bg-slate-900" : ""}`}
+                            onClick={() => {
+                              field.onChange(button);
+
+                              if (typeof onFieldChange === "function") {
+                                onFieldChange("session", button);
+                              }
+                            }}
+                          >
+                            {button}
+                          </button>
+                        );
+                      })}
+                    </>
+                  )}
+                />
               </div>
             </div>
           ) : (
@@ -301,6 +328,7 @@ const EmailForm = ({
               <PiSuitcase />
             </div>
             <select
+              {...register("leaveType")}
               id="leave-type"
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body appearance-none"
               name="leaveType"
@@ -331,6 +359,7 @@ const EmailForm = ({
               <CgNotes />
             </div>
             <textarea
+              {...register("reason")}
               id="leave-reason"
               rows={2}
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body resize-none"

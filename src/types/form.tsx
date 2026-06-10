@@ -5,7 +5,7 @@ export type FormData = {
   duration: "Full Day" | "Half Day";
   session: "Morning" | "Evening";
   leaveDates: string;
-  leaveType: string;
+  leaveType: "Annual" | "Casual" | "Medical" | "Lieu";
   reason: string;
   pendingTask: string;
   responsiblePerson: string;

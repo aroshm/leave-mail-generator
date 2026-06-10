@@ -13,11 +13,11 @@ const Content = () => {
   });
 
   const [isReceiver, setIsReceiver] = useState<boolean>(() => {
-    return localStorage.getItem("receiver") != "";
+    return Boolean(localStorage.getItem("receiver"));
   });
 
   const [isSender, setIsSender] = useState<boolean>(() => {
-    return localStorage.getItem("sender") != "";
+    return Boolean(localStorage.getItem("sender"));
   });
 
   const [plannedLeave, setPlannedLeave] = useState("Planned");
@@ -38,7 +38,7 @@ const Content = () => {
     duration: "Full Day",
     session: "Morning",
     leaveDates: "",
-    leaveType: "",
+    leaveType: "Annual",
     reason: "",
     pendingTask: "",
     responsiblePerson: "",
@@ -61,6 +61,16 @@ const Content = () => {
     setIsSender(false);
     setReceiver("");
     setIsReceiver(false);
+    setFormData({
+      leavePersonName: "",
+      duration: "Full Day",
+      session: "Morning",
+      leaveDates: "",
+      leaveType: "Annual",
+      reason: "",
+      pendingTask: "",
+      responsiblePerson: "",
+    });
     setSubmissions([]);
   };
 
@@ -73,6 +83,7 @@ const Content = () => {
 
   const handleFormSubmit = (data: FormData) => {
     setSubmissions((prev) => [...prev, { ...data, id: Date.now() }]);
+
     setIsReceiver(true);
     setIsSender(true);
 
@@ -81,7 +92,7 @@ const Content = () => {
       duration: "Full Day",
       session: "Morning",
       leaveDates: "",
-      leaveType: "",
+      leaveType: "Annual",
       reason: "",
       pendingTask: "",
       responsiblePerson: "",
