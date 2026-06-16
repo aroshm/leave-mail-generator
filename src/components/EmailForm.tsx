@@ -7,6 +7,7 @@ import { CgNotes } from "react-icons/cg";
 import { MdOutlineTask } from "react-icons/md";
 import { TbUsers } from "react-icons/tb";
 import type { FormData } from "../types/form";
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 
 type EmailFormProps = {
@@ -57,8 +58,21 @@ const EmailForm = ({
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<FormData>();
+
+  useEffect(() => {
+    setValue("duration", formData.duration);
+  }, [formData.duration, setValue]);
+
+  useEffect(() => {
+    setValue("session", formData.session);
+  }, [formData.session, setValue]);
+
+  useEffect(() => {
+    setValue("leaveType", formData.leaveType);
+  }, [formData.leaveType, setValue]);
 
   const formateDateRange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
@@ -332,7 +346,6 @@ const EmailForm = ({
               id="leave-type"
               className="block w-full ps-9 pe-3 py-2.5 border rounded-md focus:border-emerald-800 dark:focus:border-emerald-300 focus-within:border-emerald-800 dark:focus-within:border-emerald-300 focus-visible::border-emerald-800 dark:focus-visible::border-emerald-300 shadow-xs placeholder:text-body appearance-none"
               name="leaveType"
-              value={formData.leaveType}
               onChange={(e) => onFieldChange(e.target.name, e.target.value)}
             >
               {leaveType.map((leave) => (
