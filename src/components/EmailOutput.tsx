@@ -1,7 +1,8 @@
 import { TbUsers } from "react-icons/tb";
-import { MdContentCopy, MdOutlineMail } from "react-icons/md";
+import { MdOutlineMail } from "react-icons/md";
 import type { LeaveEntry } from "../types/form";
 import PreviewItem from "./PreviewItem";
+import CopyHtmlButton from "./CopyHtmlButton";
 
 type EmailOutputProps = {
   data: LeaveEntry[];
@@ -10,6 +11,68 @@ type EmailOutputProps = {
 };
 
 const EmailOutput = ({ data, onDelete, handleReset }: EmailOutputProps) => {
+  const emailHtml = `
+    <div style="font-family: 'Helvetica', Arial, sans-serif; color: #333; max-width: 600px;">
+      <p style="font-size:16px; line-height:1.5;">Hi ${data[0]?.receiverName || ""},</p>
+      <p style="font-size:16px; line-height:1.5;">
+        Please find the <strong>planned</strong> leaves for this sprint from the Kingfisher team as follows.
+      </p>
+      <table style="width:100%; border-collapse:collapse; margin-top:20px; margin-bottom:20px; font-size:14px;">
+        <thead>
+          <tr style="background-color:#f8f9fa;">
+            <th style="border:1px solid #dee2e6; padding:12px; text-align:left;">Name</th>
+            <th style="border:1px solid #dee2e6; padding:12px; text-align:left;">Date(s)</th>
+            <th style="border:1px solid #dee2e6; padding:12px; text-align:left;">Type</th>
+            <th style="border:1px solid #dee2e6; padding:12px; text-align:left;">Reason</th>
+            <th style="border:1px solid #dee2e6; padding:12px; text-align:left;">Tasks</th>
+            <th style="border:1px solid #dee2e6; padding:12px; text-align:left;">Covered By</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data
+            .map(
+              (leaveItem) => `
+                <tr>
+                  <td style="border:1px solid #dee2e6; padding:12px;">${leaveItem.leavePersonName}</td>
+                  <td style="border:1px solid #dee2e6; padding:12px;">
+                    ${leaveItem.leaveDates}${leaveItem.duration === "Half Day" ? ` - ${leaveItem.session}` : ""}
+                  </td>
+                  <td style="border:1px solid #dee2e6; padding:12px;">${leaveItem.leaveType}</td>
+                  <td style="border:1px solid #dee2e6; padding:12px;">${leaveItem.reason}</td>
+                  <td style="border:1px solid #dee2e6; padding:12px;">${leaveItem.pendingTask}</td>
+                  <td style="border:1px solid #dee2e6; padding:12px;">${leaveItem.responsiblePerson}</td>
+                </tr>
+              `,
+            )
+            .join("")}
+        </tbody>
+      </table>
+      <p style="font-size:16px; line-height:1.5; margin-top:30px;">
+        Best regards,<br />
+        <strong>${data[0]?.senderName || ""}</strong>
+      </p>
+    </div>
+  `;
+
+  const emailPlainText = `
+Hi ${data[0]?.receiverName || ""},
+
+Please find the planned leaves for this sprint from the Kingfisher team as follows.
+
+Name	Date(s)	Type	Reason	Tasks	Covered By
+${data
+  .map(
+    (leaveItem) =>
+      `${leaveItem.leavePersonName}	${leaveItem.leaveDates}${
+        leaveItem.duration === "Half Day" ? ` - ${leaveItem.session}` : ""
+      }	${leaveItem.leaveType}	${leaveItem.reason}	${leaveItem.pendingTask}	${leaveItem.responsiblePerson}`,
+  )
+  .join("\n")}
+
+Best regards,
+${data[0]?.senderName || ""}
+  `;
+
   return (
     <div className="flex flex-col gap-2.5 flex-2 bg-emerald-100 dark:bg-slate-900 p-3.5 rounded-lg shadow-2xl shadow-slate-400 dark:shadow-emerald-900 overflow-auto">
       <div className="flex items-center justify-between">
@@ -54,10 +117,10 @@ const EmailOutput = ({ data, onDelete, handleReset }: EmailOutputProps) => {
               <MdOutlineMail />
               EMAIL PREVIEW
             </div>
-            <button className="flex items-center gap-1.5 text-white bg-emerald-700 rounded-md hover:bg-emerald-600 cursor-pointer transition shadow-xs px-4 py-2.5">
-              <MdContentCopy />
-              Copy HTML
-            </button>
+            <CopyHtmlButton
+              htmlString={emailHtml}
+              plainTextString={emailPlainText}
+            />
           </div>
           <div className="px-4 py-2.5 bg-emerald-100 rounded-md">
             <div
@@ -73,7 +136,7 @@ const EmailOutput = ({ data, onDelete, handleReset }: EmailOutputProps) => {
               <p style={{ fontSize: "16px", lineHeight: "1.5" }}>
                 Please find the{" "}
                 <span style={{ fontWeight: "bold" }}>planned</span> leaves for
-                this sprint from Kingfisher team as follows.
+                this sprint from the Kingfisher team as follows.
               </p>
               <table
                 style={{
