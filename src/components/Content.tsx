@@ -21,6 +21,8 @@ const Content = () => {
   });
 
   const [plannedLeave, setPlannedLeave] = useState("Planned");
+  const [leaveHistory, setLeaveHistory] = useState<string[]>([]);
+
   const [duration, setDuration] = useState("Full Day");
   const [selectSession, setSelectSession] = useState("Morning");
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
@@ -44,6 +46,10 @@ const Content = () => {
     responsiblePerson: "",
   });
 
+  const handleLeaveButtonToggle = (value: string) => {
+    setPlannedLeave(value);
+  };
+
   const [submissions, setSubmissions] = useState<LeaveEntry[]>([]);
 
   const handleReceiver = (value: string) => {
@@ -57,10 +63,12 @@ const Content = () => {
   const handleReset = () => {
     localStorage.removeItem("receiver");
     localStorage.removeItem("sender");
+    localStorage.removeItem("planned");
     setSender("");
     setIsSender(false);
     setReceiver("");
     setIsReceiver(false);
+    setPlannedLeave("Planned");
     setFormData({
       leavePersonName: "",
       duration: "Full Day",
@@ -97,13 +105,11 @@ const Content = () => {
       pendingTask: "",
       responsiblePerson: "",
     });
+
+    setLeaveHistory((prev: string[]) => [...prev, plannedLeave]);
   };
 
   const [startDate, endDate] = dateRange;
-
-  const handleLeaveButtonToggle = (value: string) => {
-    setPlannedLeave(value);
-  };
 
   const handleDurationButtonToggle = (value: string) => {
     setDuration(value);
@@ -123,6 +129,7 @@ const Content = () => {
     if (submissions.length == 1) {
       localStorage.removeItem("receiver");
       localStorage.removeItem("sender");
+      localStorage.removeItem("planned");
       setSender("");
       setIsSender(false);
       setReceiver("");
@@ -156,6 +163,7 @@ const Content = () => {
         data={submissions}
         onDelete={handleDeleteItem}
         handleReset={handleReset}
+        leaveHistory={leaveHistory}
       />
     </div>
   );

@@ -87,30 +87,29 @@ const EmailForm = ({
   };
   return (
     <div className="flex-1 bg-emerald-100 dark:bg-slate-900 p-3.5 rounded-lg shadow-2xl shadow-slate-400 dark:shadow-emerald-900 overflow-auto">
-      <div className="flex justify-between items-center">
-        <p className="flex items-center gap-1 font-semibold">
-          <FaPlus />
-          ADD LEAVE ENTRY
-        </p>
-        <div
-          className="p-1 inline-flex rounded-md shadow-xs -space-x-px bg-emerald-50 dark:bg-slate-800"
-          role="group"
-        >
-          {togglePlanButtons.map((button) => (
-            <button
-              key={button}
-              type="button"
-              value={selectedLeave}
-              className={`px-2 py-1 rounded-md cursor-pointer ${button === selectedLeave ? "bg-emerald-200 dark:bg-slate-900" : ""}`}
-              onClick={() => onLeaveToggle(button)}
-            >
-              {button}
-            </button>
-          ))}
+      <form className="max-w-sm mx-auto" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex justify-between items-center mb-5">
+          <p className="flex items-center gap-1 font-semibold">
+            <FaPlus />
+            ADD LEAVE ENTRY
+          </p>
+          <div
+            className="p-1 inline-flex rounded-md shadow-xs -space-x-px bg-emerald-50 dark:bg-slate-800"
+            role="group"
+          >
+            {togglePlanButtons.map((button) => (
+              <button
+                key={button}
+                type="button"
+                value={selectedLeave}
+                className={`px-2 py-1 rounded-md cursor-pointer ${button === selectedLeave ? "bg-emerald-200 dark:bg-slate-900" : ""}`}
+                onClick={() => onLeaveToggle(button)}
+              >
+                {button}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
-
-      <form className="max-w-sm mx-auto mt-5" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <label
             htmlFor="receiver-name"

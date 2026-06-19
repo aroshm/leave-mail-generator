@@ -6,16 +6,30 @@ import CopyHtmlButton from "./CopyHtmlButton";
 
 type EmailOutputProps = {
   data: LeaveEntry[];
+  leaveHistory: string[];
   onDelete: (id: number) => void;
   handleReset: () => void;
 };
 
-const EmailOutput = ({ data, onDelete, handleReset }: EmailOutputProps) => {
+const EmailOutput = ({
+  data,
+  onDelete,
+  handleReset,
+  leaveHistory,
+}: EmailOutputProps) => {
+  const hasPlanned = leaveHistory.includes("Planned");
+  const hasUnplanned = leaveHistory.includes("Unplanned");
+  const leaveText = hasPlanned && hasUnplanned
+    ? "Planned & Unplanned"
+    : hasPlanned
+    ? "Planned"
+    : "Unplanned";
+
   const emailHtml = `
     <div style="font-family: 'Helvetica', Arial, sans-serif; color: #333; max-width: 600px;">
       <p style="font-size:16px; line-height:1.5;">Hi ${data[0]?.receiverName || ""},</p>
       <p style="font-size:16px; line-height:1.5;">
-        Please find the <strong>planned</strong> leaves for this sprint from the Kingfisher team as follows.
+        Please find the <strong>${leaveText}</strong> leaves for this sprint from the Kingfisher team as follows.
       </p>
       <table style="width:100%; border-collapse:collapse; margin-top:20px; margin-bottom:20px; font-size:14px;">
         <thead>
@@ -57,7 +71,7 @@ const EmailOutput = ({ data, onDelete, handleReset }: EmailOutputProps) => {
   const emailPlainText = `
 Hi ${data[0]?.receiverName || ""},
 
-Please find the planned leaves for this sprint from the Kingfisher team as follows.
+Please find the ${leaveText} leaves for this sprint from the Kingfisher team as follows.
 
 Name	Date(s)	Type	Reason	Tasks	Covered By
 ${data
@@ -135,8 +149,8 @@ ${data[0]?.senderName || ""}
               </p>
               <p style={{ fontSize: "16px", lineHeight: "1.5" }}>
                 Please find the{" "}
-                <span style={{ fontWeight: "bold" }}>planned</span> leaves for
-                this sprint from the Kingfisher team as follows.
+                <span style={{ fontWeight: "bold" }}>{leaveText}</span> leaves
+                for this sprint from the Kingfisher team as follows.
               </p>
               <table
                 style={{
